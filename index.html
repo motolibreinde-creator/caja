@@ -257,6 +257,10 @@ summary{color:var(--ink)}
 .notas .day{grid-column:1/-1;margin:10px 4px 0}
 .nota{margin-bottom:0;border-left:0;border-top:6px solid var(--yellow);border-radius:20px;min-height:140px;display:flex;flex-direction:column;box-shadow:0 8px 22px rgba(3,8,39,.30)}
 .nota p{font-size:17px;cursor:pointer;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.final{background:var(--field);border:4px solid var(--yellow);border-radius:20px;text-align:center;padding:14px 10px;margin-bottom:14px}
+.final-lb{font-weight:700;font-size:18px;color:var(--muted)}
+.final-v{font-family:var(--display);font-size:72px;line-height:1.1;color:var(--ink);overflow-wrap:anywhere}
+.final-sub{font-size:14px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -378,16 +382,12 @@ function ensureApertura(){
   var prev=null;
   Object.keys(state.cajas).forEach(function(x){ if(x<k && state.cajas[x].cerrada && (!prev||x>prev)) prev=x; });
   var chip='';
-  if(prev){
-    var q=state.cajas[prev].quedo;
-    if(typeof q==='number') chip='<p class="muted small" style="margin:0 0 10px">Al cerrar quedaron '+money(q)+' para el cambio. Cambia el monto si no es correcto.</p>';
-  }
   var d=new Date(), h=d.getHours();
   var g=h<12?'Buenos días':(h<19?'Buenas tardes':'Buenas noches');
   openModal('<h2>'+g+'. ¿Cuánto hay en caja?</h2>'+
     '<p class="muted" style="margin:0 0 14px">Cuenta el efectivo del cajón antes de empezar a vender.</p>'+chip+
     '<form data-form="apertura"><div class="fields"><div><label for="apInput">Efectivo en caja</label>'+
-    '<input id="apInput" inputmode="decimal" autocomplete="off" placeholder="$0" value="'+(typeof q==='number'?q:'')+'"></div></div>'+
+    '<input id="apInput" inputmode="decimal" autocomplete="off" placeholder="$0"></div></div>'+
     '<button class="btn red wide" type="submit">Abrir caja</button></form>',true);
 }
 
@@ -650,9 +650,9 @@ function doCierre(){
   var quedo=cajaAhora(k);
   c.cerrada=true; c.cierreT=Date.now(); save(); render(); toast('Caja cerrada ✓');
   openModal('<h2>Caja cerrada 🔔</h2><p class="aviso">'+esc(state.ajustes.aviso)+'</p>'+
-    '<div class="cambio" style="margin-bottom:10px">'+(ren>0?'<div class="srow"><span>Renta</span><b>'+money(ren)+'</b></div>':'')+'<div class="srow"><span>Chicas ('+S.chicas+' × '+money(S.pago)+')</span><b>'+money(tot)+'</b></div><div class="srow t"><span>Debe haber</span><strong>'+money(quedo)+'</strong></div></div>'+
-    '<form data-form="quedo"><div class="fields"><div><label for="quedoIn">¿Cuánto vas a dejar en caja?</label><input id="quedoIn" inputmode="decimal" autocomplete="off" placeholder="$0"></div></div>'+
-    '<button class="btn blue wide" type="submit">Guardar</button></form>',true);
+    '<div class="cambio" style="margin-bottom:12px">'+(ren>0?'<div class="srow"><span>Renta</span><b>'+money(ren)+'</b></div>':'')+'<div class="srow"><span>Chicas ('+S.chicas+' × '+money(S.pago)+')</span><b>'+money(tot)+'</b></div></div>'+
+    '<div class="final"><div class="final-lb">En caja debe haber</div><div class="final-v">'+money(quedo)+'</div><div class="final-sub">Ya descontando la renta y el pago de las chicas</div></div>'+
+    '<button class="btn blue wide" data-act="close">Listo</button>',true);
 }
 
 /* ---------- GASTOS ---------- */
