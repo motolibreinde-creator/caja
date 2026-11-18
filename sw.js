@@ -1,7 +1,7 @@
 /* Modo sin conexión para Moda Americana para Ti.
    Guarda la página en el iPad para que abra aunque no haya internet.
    Si algún día se actualiza la página, sube el número de versión. */
-var CACHE='mapt-v1';
+var CACHE='mapt-v2';
 var SHELL=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png'];
 
 self.addEventListener('install',function(e){
